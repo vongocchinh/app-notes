@@ -6,17 +6,18 @@
 
 .container{
     width: 100%;
-    height: 100vh;
+    height: 87vh;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     padding: 0px 30px;
+    
 }
 
 
 .bar{
     width: 25%;
-    height: 100vh;
+    height: 100%;
     border: 1px solid #EAEAEA;
 }
 .bar .title{
@@ -40,13 +41,13 @@
 }
 .bar-list{
     width: 100%;
-    height: 90vh;
+    height: 100%;
     overflow-y: auto;
 }
 
 .home{
     width: 75%;
-    height: 100vh;
+    height: 100%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -161,4 +162,54 @@ textarea{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.header{
+    width: 100%;
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 40px;
+    background-color: #007BFF;
+}
+
+.header .link{
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login{
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.form-login{
+    width: 400px;
+}
+
+.form-login h2{
+    margin-bottom: 20px;
+}
+
+.form-login form input{
+    width: 300px;
+    height: 35px;
+    margin-bottom: 10px;
+}
+.form-login form input[input='text']{
+    padding-left: 5px;
+    outline: none;
+    border-radius: 5px;
+}
+
+.form-login form input[input='submit']{
+    outline: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
 }

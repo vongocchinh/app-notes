@@ -2,46 +2,43 @@
 import React, { useEffect } from 'react'
 import './../styles/style.css'
 import {nanoid} from 'nanoid'
-import { useAppDispatch } from '../../reducer/store.hook';
-import { addNote } from '../../reducer/notes/note';
+import { useAppDispatch, useAppSelector } from '../../reducer/store.hook';
+import {  ADD_NOTE_API } from '../../reducer/notes/note';
 import { useHistory } from 'react-router-dom';
+import { GET_LOGIN } from './../../reducer/users/user';
 interface HomeTs{
 
 }
 const Add:React.FC<HomeTs>=()=> {
-    // const [input, setInput] = useState('')
-    // const [text, setText] = useState('')
     const history=useHistory();
     const dispatch=useAppDispatch();
-    // const onchange=({target:{name,value}}: React.ChangeEvent<HTMLInputElement>)=>{
-    //     setInput(value)
-    // }
-
-    // const onChangeTextArea=(e:React.ChangeEvent<HTMLTextAreaElement>)=>{
-    //     var value=e.target.value;
-    //     setText(value);
-    // }
-    // const onSubmit=(e:React.FormEvent)=>{
-    //     e.preventDefault();
-    //     var note={
-    //         name:input,
-    //         des:text
-    //     }
-    //     setInput('')
-    //     setText('')
-    //     console.log(note);
-    // }
+    const userLogin=useAppSelector(GET_LOGIN);
     useEffect(() => {
         var id:string= nanoid();
-        var notes:noteModel={
-            id:id,
-            title:"Hãy nhập tiêu đề ở đây ....",
-            des:"Chi tiết....",
-            time:(new Date()).toString()
+        if(userLogin.idUser){
+            var notes:noteModel={
+                id:id,
+                title:"Hãy nhập tiêu đề ở đây ....",
+                des:"Chi tiết....",
+                time:(new Date()).toString(),
+                userId:userLogin.idUser
+            }
+            dispatch(ADD_NOTE_API(notes));
+            history.push(`/note/${id}`)
+        }else{
+            var notesNot:noteModel={
+                id:id,
+                title:"Hãy nhập tiêu đề ở đây ....",
+                des:"Chi tiết....",
+                time:(new Date()).toString(),
+                userId:""
+            }
+            dispatch(ADD_NOTE_API(notesNot));
+            history.push(`/note/${id}`)
         }
-        dispatch(addNote(notes));
-        history.push(`/note/${id}`)
-    }, [1])
+        
+       
+    }, [1,userLogin])
     return (
         <div className="home">
             {/* <div className="form-top">

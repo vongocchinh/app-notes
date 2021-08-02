@@ -21,7 +21,6 @@ interface ItemTS{
     }
     const active = () => {
         var item = document.querySelectorAll('.item');
-        console.log(item);
         item.forEach(v => v.addEventListener('click', () => {
             let j = 0;
             item[j++].className = "item";

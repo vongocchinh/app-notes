@@ -1,15 +1,24 @@
 import {createSlice,createAsyncThunk,createEntityAdapter,PayloadAction} from '@reduxjs/toolkit'
 import { RootState } from '../store';
-import { ADD_NOTES_AFECTH } from '../../Api/Notes';
+import { ADD_NOTES_AFECTH, GET_NOTES } from '../../Api/Notes';
 
 
+
+
+
+// 
 
 export interface NoteModel{
     id:string,
     title:string,
     des:string,
-    time:string
+    time:string,
+    userId:string | null | undefined
 }
+
+
+
+
 
 interface InitialStateTS{
     messageError:undefined,
@@ -28,7 +37,10 @@ export const ADD_NOTE_API=createAsyncThunk("notes/addNote",async (notes:NoteMode
 })
 
 
-
+export const GET_NOTE_API=createAsyncThunk("notes/getNotes", async (userId:string)=>{
+    var result=await GET_NOTES(userId);
+    return result
+})
 
 export enum ValidationAddNotes{
     Fulfilled,
@@ -66,12 +78,7 @@ const InitialState=noteAdapter.getInitialState<InitialStateTS>({
     validationDeleteNotes:undefined,
     validationUpdateNotes:undefined
 })
-const data : NoteModel[]=[
-    {id:'1',title:'Lorem ipsum dolor sit amet consectetur adipisicing elit',des:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ratione rerum repudiandae? Similique, possimus eius voluptate quidem eaque, soluta nihil repellat saepe ea adipisci ut doloremque. Doloribus ducimus impedit ratione!',time:(new Date()).toString()}
-    ,
-    {id:'2',title:'Met consectetur adipisicing elit',des:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ratione rerum repudiandae? Similique, possimus eius voluptate quidem eaque, soluta nihil repellat saepe ea adipisci ut doloremque. Doloribus ducimus impedit ratione!',time:(new Date()).toString()}
-
-];
+const data : NoteModel[]=[];
 
 
 
@@ -100,6 +107,10 @@ const NoteSlices=createSlice({
             noteAdapter.upsertOne(state,action.payload);
             state.messageError=undefined;
             state.validationAddNotes=ValidationAddNotes.Fulfilled
+        });
+        builder.addCase(GET_NOTE_API.fulfilled,(state,action: PayloadAction<Array<NoteModel> >)=>{
+            noteAdapter.upsertMany(state,action.payload);
+            state.messageError=undefined;
         })
     }
 })
@@ -113,3 +124,5 @@ export const {
 
 export const {addNote,deleteNotes,updateNotes}=NoteSlices.actions;
 export default NoteSlices.reducer;
+
+export const GET_VALIDATION_ADD_NOTE=(state:RootState)=>state.Notes.validationAddNotes;

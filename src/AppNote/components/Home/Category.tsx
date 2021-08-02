@@ -1,10 +1,10 @@
-import React, { useEffect,  useState } from 'react'
+import React, {   useMemo,  useState } from 'react'
 import './../styles/style.css'
 import { useSelector } from 'react-redux';
 import { RootState, } from '../../reducer/store';
-import { selectNotesById, updateNotes } from '../../reducer/notes/note';
+import { GET_VALIDATION_ADD_NOTE, selectNotesById, updateNotes } from '../../reducer/notes/note';
 import {  useHistory } from 'react-router-dom';
-import { useAppDispatch } from './../../reducer/store.hook';
+import { useAppDispatch, useAppSelector } from './../../reducer/store.hook';
 
 interface HomeTs{
     match:any,
@@ -15,19 +15,24 @@ const Category:React.FC<HomeTs>=({match})=> {
     const [text, setText] = useState('')
     const history=useHistory();
     const dispatch=useAppDispatch();
+    const validationAddNotes=useAppSelector(GET_VALIDATION_ADD_NOTE);
     const onchange=({target:{name,value}}: React.ChangeEvent<HTMLInputElement>)=>{
         setInput(value)
     }
     var id=match.params.id
     const noteId:any =useSelector<RootState>(state=>selectNotesById(state,id));
-    useEffect(() => {
-        if(noteId){
-            setInput(noteId.title);
-            setText(noteId.des);
-        }else{
-            history.push('/');
+    useMemo(() => {
+        if(validationAddNotes===0){
+
+            if(noteId){
+                setInput(noteId.title);
+                setText(noteId.des);
+            }else{
+                history.push('/');
+            }
         }
-    }, [noteId,history])
+        
+    }, [noteId,history,validationAddNotes])
     const onChangeTextArea=(e:React.ChangeEvent<HTMLTextAreaElement>)=>{
         var value=e.target.value;
         setText(value);
@@ -40,7 +45,8 @@ const Category:React.FC<HomeTs>=({match})=> {
                 id:noteId.id,
                 title:input,
                 des:text,
-                time:noteId.time
+                time:noteId.time,
+                userId:noteId.userId
             }
             dispatch(updateNotes(note));
        }else{
